@@ -1,0 +1,26 @@
+<div class="msg_history mt-1" #msgScroll (scroll)="scrollHandler($event)">
+  <ng-container *ngFor="let message of messages">
+
+      <div class="row m-3" [ngClass]="{'d-flex justify-content-end': !message.isIncoming }">
+
+        <div [ngClass]="message.isIncoming ? 'col-7' : 'col-6'">
+          <p [ngClass]="message.isIncoming ? 'received_msg violet' : 'sent_msg'">
+            <a routerLink="../../users/{{message.authorId}}" class="login text-dark">{{message.authorLogin}}</a>
+            {{message.text}}
+          </p>
+          <span class="time_date">{{message.creationDate | date: 'medium' : ''}}</span>
+        </div>
+
+      </div>
+
+  </ng-container>
+</div>
+
+<div class="input-group mt-3">
+  <input type="text" class="form-control" placeholder="Message"
+         [(ngModel)]="message.text" (keydown.enter)="sendMessage()">
+  <div class="input-group-append">
+    <button mat-raised-button class="violet ml-2" color="primary"
+            (click)="sendMessage()">Send</button>
+  </div>
+</div>

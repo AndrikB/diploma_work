@@ -1,0 +1,34 @@
+<div class="row m-0 mt-2">
+  <div class="col">
+    <mat-form-field>
+      <mat-label>Select date</mat-label>
+      <input matInput [min]="min" [matDatepicker]="dp3" [(ngModel)]="date" disabled>
+      <mat-datepicker-toggle matSuffix [for]="dp3"></mat-datepicker-toggle>
+      <mat-datepicker #dp3 disabled="false"></mat-datepicker>
+    </mat-form-field>
+  </div>
+
+
+  <div class="col">
+    <mat-form-field appearance="fill">
+      <mat-label>select count of players</mat-label>
+      <mat-select [(ngModel)]="countPlayers" >
+        <mat-option *ngFor="let count of counts" [value]="count">
+          {{count}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="col">
+    <mat-form-field appearance="fill">
+      <mat-label>Address</mat-label>
+      <textarea matInput [(ngModel)]="address" ></textarea>
+    </mat-form-field>
+  </div>
+
+  <div class="col">
+    <button mat-raised-button (click)="planGame()">Plan</button>
+  </div>
+
+</div>

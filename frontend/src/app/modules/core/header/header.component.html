@@ -1,0 +1,92 @@
+<!--Navbar-->
+<mdb-navbar SideClass="navbar navbar-expand-md navbar-dark violet" [containerInside]="false" class="violet"
+            style="background-color: #3f3a60">
+
+  <!-- Navbar brand -->
+  <mdb-navbar-brand><a class="navbar-brand" href="#">BGNet</a></mdb-navbar-brand>
+
+  <!-- Collapsible content -->
+  <links>
+
+    <!-- Links -->
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link">Home<span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a routerLink="../plannedGames" class="nav-link">Planned Games</a>
+      </li>
+      <li class="nav-item">
+        <a routerLink="../chats" class="nav-link">Chats</a>
+      </li>
+
+      <!-- Dropdown -->
+      <li class="nav-item dropdown" dropdown>
+        <a dropdownToggle type="button" class="nav-link dropdown-toggle">
+          Games by<span class="caret"></span></a>
+        <div *dropdownMenu class="dropdown-menu dropdown dropdown-primary" role="menu">
+          <a class="dropdown-item" routerLink="../games/category">Categories</a>
+          <a class="dropdown-item" routerLink="../games/mechanic">Mechanics</a>
+<!--          <a class="dropdown-item" href="#">Another action</a>-->
+<!--          <a class="dropdown-item" href="#">Something else here</a>-->
+<!--          <div class="divider dropdown-divider"></div>-->
+<!--          <a class="dropdown-item" href="#">Separated link</a>-->
+        </div>
+      </li>
+
+    </ul>
+    <!-- Links -->
+
+    <ul class="navbar-nav ml-auto nav-flex-icons">
+      <ng-template [ngIf]="this.securityService.isLoggedIn()" [ngIfElse]="loggedOut">
+        <li class="nav-item">
+          <a routerLink="../profile" class="nav-link">User Page</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" (click)="securityService.removeToken()">Log out</a>
+        </li>
+
+      </ng-template>
+
+      <ng-template #loggedOut>
+
+        <li class="nav-item">
+          <a routerLink="../login" class="nav-link">Sign in</a>
+        </li>
+
+        <li class="nav-item">
+          <a routerLink="../join" class="nav-link">Join(it`s free)!</a>
+        </li>
+
+      </ng-template>
+
+
+      <!--for select-->
+      <li class="nav-item">
+        <!-- Search form -->
+
+        <form>
+          <mat-form-field>
+            <mat-label style="color: black">Game</mat-label>
+            <input style="padding-left: 5px" type="text"
+                   placeholder="Write name"
+                   matInput
+                   [formControl]="myControl"
+                   [matAutocomplete]="auto">
+            <mat-autocomplete #auto="matAutocomplete">
+              <mat-option (onSelectionChange)='select(option.id)' *ngFor="let option of this.data" [value]="option.id">
+                {{option.name}}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </form>
+      </li>
+
+
+    </ul>
+  </links>
+  <!-- Collapsible content -->
+
+</mdb-navbar>
+<!--/.Navbar-->

@@ -1,0 +1,33 @@
+<div class="m-3" *ngIf="chat">
+  <div class="input-group">
+
+    <button mat-raised-button class="violet ml-2 mr-1" color="primary" (click)="leaveChat()">Leave</button>
+
+    <input type="text" class="form-control col-6" placeholder="Chat name" [(ngModel)]="chat.name">
+    <button mat-raised-button class="violet ml-2" color="primary" (click)="rename()">Rename</button>
+    <button mat-raised-button class="violet ml-2" color="primary" (click)="invitation = !invitation">Invite</button>
+
+    <ng-template [ngIf]="invitation">
+      <form>
+        <mat-form-field>
+          <mat-label>User</mat-label>
+          <input type="text"
+                 placeholder="Write login"
+                 matInput
+                 [formControl]="myControl"
+                 [matAutocomplete]="auto">
+          <mat-autocomplete #auto="matAutocomplete">
+            <mat-option *ngFor="let user of this.users" [value]="user.login">
+              {{user.login}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </form>
+      <button  mat-raised-button class="violet m-1" color="primary" (click)="inviteUser()">
+        Invite
+      </button>
+    </ng-template>
+  </div>
+
+  <app-message-history [chatId]="chatId"></app-message-history>
+</div>

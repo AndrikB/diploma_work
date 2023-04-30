@@ -1,0 +1,115 @@
+<mat-tab-group dynamicHeight *ngIf="userData">
+
+  <mat-tab label="Change profile">
+
+    <div class="row">
+      <div class="col"></div>
+
+      <div class="col">
+
+        <h3 class="text-center">Edit Personal Data</h3>
+
+        <mat-form-field>
+          <mat-label>First Name</mat-label>
+          <input type="text" matInput [formControl]="firstNameFormControl" placeholder="Write your First Name">
+          <mat-error *ngIf="firstNameFormControl.hasError('pattern')">
+            No specials symbols allowed in this field
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Last Name</mat-label>
+          <input type="text" matInput [formControl]="lastNameFormControl" placeholder="Write your Last Name">
+          <mat-error *ngIf="lastNameFormControl.hasError('pattern')">
+            No specials symbols allowed in this field
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Description</mat-label>
+          <textarea type="text" matInput [formControl]="descriptionFormControl" placeholder="Write Description"></textarea>
+        </mat-form-field>
+
+        <div class="row">
+          <div class="form-check col">
+            <button class="btn btn-block violet btn-secondary" (click)="save()">
+              Save
+            </button>
+          </div>
+
+          <div class="form-check col">
+            <button routerLink="../profile"
+                    class="btn btn-outline-secondary btn-block ">
+              Cancel
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="col"></div>
+    </div>
+  </mat-tab>
+
+  <mat-tab label="Change password">
+
+    <div class="row">
+      <div class="col"></div>
+
+      <div class="col">
+
+        <h3 class="text-center">Change Password</h3>
+        <mat-form-field>
+          <mat-label>Current Password</mat-label>
+          <input type="password" matInput [formControl]="currentPasswordFormControl" placeholder="Write your Current Password">
+          <mat-error *ngIf="currentPasswordFormControl.hasError('pattern')">
+            No specials symbols allowed in this field
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>New Password</mat-label>
+          <input type="password" matInput [formControl]="newPasswordFormControl" placeholder="Write your New Password" (change)="matchEquality()">
+          <mat-error *ngIf="newPasswordFormControl.hasError('required')">
+            Password is <strong>required</strong>
+          </mat-error>
+          <mat-error *ngIf="newPasswordFormControl.hasError('minlength') && !newPasswordFormControl.hasError('required')">
+            Password should be at least 8 characters
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Confirm Password</mat-label>
+          <input type="password" matInput [formControl]="confirmPasswordFormControl" placeholder="Confirm Your Password" (change)="matchEquality()">
+          <mat-error *ngIf="confirmPasswordFormControl.hasError('required')">
+            Confirmation is <strong>required</strong>
+          </mat-error>
+          <mat-error *ngIf="confirmPasswordFormControl.hasError('notequal') && !confirmPasswordFormControl.hasError('required')">
+            Passwords should be equal
+          </mat-error>
+        </mat-form-field>
+
+        <div class="row">
+          <div class="form-check col">
+            <button class="btn btn-block violet btn-secondary"
+                    (click)="changePassword()">
+              Save
+            </button>
+          </div>
+
+          <div class="form-check col">
+            <button routerLink="../profile"
+                    class="btn btn-outline-secondary btn-block ">
+              Cancel
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="col"></div>
+    </div>
+
+  </mat-tab>
+
+</mat-tab-group>
