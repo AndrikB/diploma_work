@@ -1,4 +1,4 @@
-package org.blagij.diploma.common
+package org.blagij.diploma
 
 import io.vertx.core.Vertx
 import io.vertx.core.eventbus.EventBus
@@ -6,6 +6,8 @@ import io.vertx.ext.web.client.WebClient
 import io.vertx.pgclient.PgConnectOptions
 import io.vertx.pgclient.PgPool
 import io.vertx.sqlclient.PoolOptions
+import org.blagij.diploma.common.WebRouter
+import org.blagij.diploma.common.single
 import org.blagij.diploma.service.game.gameModule
 import org.blagij.diploma.service.ui.uiModule
 import org.kodein.di.Kodein
@@ -33,11 +35,7 @@ val kodein = Kodein {
         )
     }
 
-    single<WebRouter> {
-        val router = WebRouter(instance())
-
-        router
-    }
+    single<WebRouter> { WebRouter(instance()) }
 
     importAll(
         uiModule,

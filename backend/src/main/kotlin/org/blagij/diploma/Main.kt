@@ -5,7 +5,6 @@ import io.vertx.core.Verticle
 import io.vertx.core.Vertx
 import io.vertx.kotlin.core.http.httpServerOptionsOf
 import org.blagij.diploma.common.WebRouter
-import org.blagij.diploma.common.kodein
 import org.blagij.diploma.common.logger
 import org.kodein.di.Kodein
 import org.kodein.di.direct
