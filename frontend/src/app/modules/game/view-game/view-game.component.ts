@@ -44,11 +44,10 @@ export class ViewGameComponent implements OnInit {
       })
   }
 
-  convertToLink(category: string, clas: string) {
-    let convertedCaegory = category.replace("/", "")
-      .replace("  ", " ")
-      .replace(' ', '-')
+  convertToLink(category: string) {
+    return category.replaceAll("/", "")
+      .replaceAll("  ", " ")
+      .replaceAll(' ', '-')
       .toLowerCase()
-    return `/games/${clas}/${convertedCaegory}`;
   }
 }
