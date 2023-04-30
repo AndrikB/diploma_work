@@ -15,29 +15,20 @@ import java.util.concurrent.atomic.AtomicInteger
 val log = logger("Main")
 
 fun main() {
-    log.info("hello world!")
-
     val vertx = kodein.direct.instance<Vertx>()
 
     setupVerticles(kodein.direct.allInstances(), vertx, kodein)
-
 }
 
 fun setupVerticles(verticles: List<Verticle>, vertx: Vertx, kodein: Kodein) {
     vertx.deploy(verticles).onSuccess {
-
-        vertx
-            .createHttpServer(
-                httpServerOptionsOf(
-                    compressionSupported = true
-                )
-            )
-            .requestHandler(kodein.direct.instance<WebRouter>())
-            .listen(8080) { listen ->
+        vertx.createHttpServer(httpServerOptionsOf(compressionSupported = true))
+            .requestHandler(kodein.direct.instance<WebRouter>()).listen(8080) { listen ->
                 if (listen.succeeded()) {
                     log.info("HTTP server running on port 8080")
                 } else {
                     log.error("Failed to start HTTP server on port 8080, '${listen.cause()}'")
+                    vertx.close()
                 }
             }
     }.onFailure {
@@ -53,13 +44,11 @@ fun Vertx.deploy(verticles: List<Verticle>): Future<Unit> {
 
         verticles.forEachIndexed { _, verticle ->
             deployVerticle(verticle) {
-
                 if (it.failed()) {
                     deploy.fail(it.cause())
                 }
 
                 log.info("Deployed: ${verticle::class.simpleName}")
-
                 if (counter.decrementAndGet() == 0) {
                     deploy.complete()
                 }
