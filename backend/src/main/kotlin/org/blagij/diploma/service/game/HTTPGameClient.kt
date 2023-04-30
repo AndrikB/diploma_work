@@ -1,5 +1,6 @@
 package org.blagij.diploma.service.game
 
+import io.vertx.core.json.JsonObject
 import io.vertx.ext.web.client.WebClient
 import io.vertx.kotlin.coroutines.await
 import org.blagij.diploma.common.logger
@@ -35,6 +36,12 @@ class HTTPGameClient(val client: WebClient) {
         return json.addLinks("boardgamecategory")
             .addLinks("boardgamemechanic")
             .put("id", id)
+    }
+
+    suspend fun getGamesByTypes(gameTypeId: Int): JsonObject {
+        return client.getAbs("https://api.geekdo.com/api/geekitem/linkeditems?linkdata_index=boardgame&nosession=1&objectid=${gameTypeId}&objecttype=property&pageid=1&showcount=25&sort=rank&subtype=boardgamecategory",)
+            .send().await()
+            .bodyAsJsonObject()
     }
 }
 
