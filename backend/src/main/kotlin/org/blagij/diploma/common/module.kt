@@ -4,6 +4,7 @@ import io.vertx.core.Vertx
 import io.vertx.core.eventbus.EventBus
 import io.vertx.ext.web.client.WebClient
 import org.blagij.diploma.service.game.gameModule
+import org.blagij.diploma.service.ui.uiModule
 import org.kodein.di.Kodein
 import org.kodein.di.generic.instance
 
@@ -22,6 +23,7 @@ val kodein = Kodein {
     }
 
     importAll(
+        uiModule,
         gameModule
     )
 }
