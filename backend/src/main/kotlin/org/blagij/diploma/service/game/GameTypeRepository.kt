@@ -5,7 +5,7 @@ import io.vertx.sqlclient.Row
 import io.vertx.sqlclient.Tuple
 import org.blagij.diploma.common.Repository
 
-class GameTypeRepository(override val pool: PgPool) : Repository<GameType>() {
+class GameTypeRepository(override val pgPool: PgPool) : Repository<GameType>() {
     override val mapper: Row.() -> GameType = {
         GameType(
             id = getInteger("id"),
