@@ -5,4 +5,5 @@ import org.kodein.di.Kodein
 
 val userModule = Kodein.Module("user") {
     single<UserVerticle>()
+    single<UserRepository>()
 }

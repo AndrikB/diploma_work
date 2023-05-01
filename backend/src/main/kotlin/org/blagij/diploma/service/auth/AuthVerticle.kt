@@ -11,6 +11,8 @@ import org.blagij.diploma.common.BaseVerticle
 import org.blagij.diploma.common.WebRouter
 import org.blagij.diploma.common.encodePassword
 import org.blagij.diploma.common.serviceUrl
+import org.blagij.diploma.service.user.User
+import org.blagij.diploma.service.user.UserRepository
 import java.util.UUID
 
 class AuthVerticle(
