@@ -10,7 +10,9 @@ import org.blagij.diploma.common.WebRouter
 import org.blagij.diploma.common.single
 import org.blagij.diploma.service.auth.authModule
 import org.blagij.diploma.service.game.gameModule
+import org.blagij.diploma.service.plannedgame.plannedGameModule
 import org.blagij.diploma.service.ui.uiModule
+import org.blagij.diploma.service.user.userModule
 import org.kodein.di.Kodein
 import org.kodein.di.generic.instance
 
@@ -41,6 +43,8 @@ val kodein = Kodein {
     importAll(
         uiModule,
         gameModule,
-        authModule
+        authModule,
+        userModule,
+        plannedGameModule,
     )
 }

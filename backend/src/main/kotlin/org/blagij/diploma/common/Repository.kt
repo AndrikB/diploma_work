@@ -4,6 +4,7 @@ import io.vertx.core.Future
 import io.vertx.kotlin.coroutines.await
 import io.vertx.pgclient.PgPool
 import io.vertx.sqlclient.Row
+import io.vertx.sqlclient.RowSet
 import io.vertx.sqlclient.Tuple
 import net.logstash.logback.argument.StructuredArguments.entries
 import org.intellij.lang.annotations.Language
@@ -33,11 +34,13 @@ abstract class Repository<T> {
                                 queryFirst.complete(rs.result().map { it.mapper() }.first())
                             } else {
                                 logger.error(
-                                    sqlExceptionMessage, entries(mapOf(
+                                    sqlExceptionMessage, entries(
+                                        mapOf(
                                             "cause" to rs.cause(),
                                             "query" to sql.trim().replace(Regex("\\n\\s+"), " "),
                                             "params" to params
-                                        ))
+                                        )
+                                    )
                                 )
                                 queryFirst.fail(rs.cause())
                             }
@@ -55,7 +58,7 @@ abstract class Repository<T> {
         @Language("PostgreSQL") sql: String,
         params: Tuple = Tuple.tuple(),
         mapper: Row.() -> T = mapper()
-    ): List<T>  {
+    ): List<T> {
         return Future.future<List<T>> { queryFirst ->
             pgPool.getConnection().compose { conn ->
                 conn
@@ -117,6 +120,43 @@ abstract class Repository<T> {
                             }
                         } catch (e: Exception) {
                             queryBatch.fail(e)
+                        } finally {
+                            conn.close()
+                        }
+
+                    }
+            }
+        }.await()
+    }
+
+    suspend fun exec(
+        @Language("PostgreSQL") sql: String,
+        params: Tuple = Tuple.tuple()
+    ): RowSet<Row> {
+
+        return Future.future<RowSet<Row>> { exec ->
+            pgPool.getConnection().compose { conn ->
+                conn
+                    .preparedQuery(sql)
+                    .execute(params)
+                    .onComplete { rs ->
+                        try {
+                            if (rs.succeeded()) {
+                                exec.complete(rs.result())
+                            } else {
+                                logger.error(
+                                    sqlExceptionMessage, entries(
+                                        mapOf(
+                                            "cause" to rs.cause(),
+                                            "query" to sql.trim().replace(Regex("\\n\\s+"), " "),
+                                            "params" to params
+                                        )
+                                    )
+                                )
+                                exec.fail(rs.cause())
+                            }
+                        } catch (e: Exception) {
+                            exec.fail(e)
                         } finally {
                             conn.close()
                         }

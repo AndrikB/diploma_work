@@ -38,6 +38,23 @@ class HTTPGameClient(val client: WebClient) {
             .put("id", id)
     }
 
+
+    suspend fun getByIds(id: String): JSONArray {
+        val response = client.getAbs("$bggUrl/xmlapi2/thing?id=$id")
+            .send().await()
+            .bodyAsString()
+
+        val arr: JSONArray = XML.toJSONObject(response).getJSONObject("items").getJSONArray("item")
+
+        for (i in 0 until arr.length()) {
+            arr.getJSONObject(i)
+                .addLinks("boardgamecategory")
+                .addLinks("boardgamemechanic")
+        }
+
+        return arr
+    }
+
     suspend fun getGamesByTypes(gameTypeId: Int): JsonObject {
         return client.getAbs("https://api.geekdo.com/api/geekitem/linkeditems?linkdata_index=boardgame&nosession=1&objectid=${gameTypeId}&objecttype=property&pageid=1&showcount=25&sort=rank&subtype=boardgamecategory",)
             .send().await()

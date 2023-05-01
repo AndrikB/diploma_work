@@ -15,6 +15,10 @@ class GameVerticle(
                 httpBGGClient.searchGame(name)
             }
 
+            "GET /api/v1/game/ids/:ids" { ids: String ->
+                httpBGGClient.getByIds(ids)
+            }
+
             "GET /api/v1/game/:id" { id: String ->
                 httpBGGClient.getById(id)
             }

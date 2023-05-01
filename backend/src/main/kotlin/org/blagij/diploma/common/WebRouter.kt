@@ -87,4 +87,16 @@ class WebRouter(private val vertx: Vertx) : RouterImpl(vertx) {
             handler(params[0] as A).takeIf { successCode == 200 }
         }
     }
+
+    inline operator fun <reified A, reified B> String.invoke(
+        successCode: Int = 200,
+        noinline handler: suspend (A, B) -> Any?
+    ): Route {
+        return route(this) { ctx ->
+            ctx.response().statusCode = successCode
+
+            val params = handler.reflect()!!.parameters.map(ParameterValueResolver(ctx)::resolve)
+            handler(params[0] as A, params[1] as B).takeIf { successCode == 200 }
+        }
+    }
 }
