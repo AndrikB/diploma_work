@@ -52,6 +52,7 @@ class ParameterValueResolver(private val ctx: RoutingContext) {
                 }
             }
             "ctx", "context" -> ctx
+            "userId", "userID" -> UUID.fromString(ctx.user().principal().getString("jti"))
             else ->
                 mapValue(
                     ctx.anyParam(it.name!!),
