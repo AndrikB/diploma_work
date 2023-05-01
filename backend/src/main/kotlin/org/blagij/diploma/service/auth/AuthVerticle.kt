@@ -3,6 +3,7 @@ package org.blagij.diploma.service.auth
 import io.vertx.core.json.JsonObject
 import io.vertx.ext.auth.jwt.JWTAuth
 import io.vertx.ext.mail.MailMessage
+import io.vertx.ext.web.handler.JWTAuthHandler
 import io.vertx.kotlin.ext.auth.jwtOptionsOf
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -18,9 +19,24 @@ class AuthVerticle(
     tokenRepository: TokenRepository,
     private val mailClient: EMailClient,
     private val jwtAuth: JWTAuth,
+    private val jwtAuthHandler: JWTAuthHandler,
 ) : BaseVerticle() {
     init {
         routes {
+
+            val publicPaths = listOf(
+                "/api/v1/auth",
+                "/api/v1/game",
+            )
+            route().order(-1).handler {
+                val requestPath = it.request().path()
+
+                if (publicPaths.any { path -> requestPath.startsWith(path) }) {
+                    it.next()
+                } else {
+                    jwtAuthHandler.handle(it)
+                }
+            }
 
             "POST /api/v1/auth/register" { body: User ->
                 userRepository.createUser(body.copy(status = "UNACTIVATED", password = encodePassword(body.password)))
