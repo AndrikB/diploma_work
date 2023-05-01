@@ -58,6 +58,16 @@ class UserRepository(override val pgPool: PgPool) : Repository<User>() {
         )
     }
 
+    suspend fun searchUserByLogin(login: String): List<User> {
+        return query("""
+            SELECT *
+            FROM users
+            WHERE login ILIKE $1
+        """.trimIndent(), Tuple.of(login)
+        )
+
+    }
+
 }
 data class User(
     val id: UUID = UUID.randomUUID(),

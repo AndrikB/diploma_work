@@ -15,6 +15,15 @@ class UserVerticle(
                 userRepository.getUserByUserId(userId)
             }
 
+
+            "GET /api/v1/user/:id" { id: UUID ->
+                userRepository.getUserByUserId(id)
+            }
+
+            "GET /api/v1/user/search/:login" { login: String ->
+                userRepository.searchUserByLogin(login)
+            }
+
         }
     }
 
