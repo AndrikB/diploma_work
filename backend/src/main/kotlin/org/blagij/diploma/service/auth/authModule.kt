@@ -12,6 +12,7 @@ val authModule = Kodein.Module("auth") {
     single<AuthVerticle>()
     single<TokenRepository>()
     single<EMailClient>()
+    single<CleanUpTokensPeriodic>()
     single<JWTAuth> {
         JWTAuth.create(
             instance(),

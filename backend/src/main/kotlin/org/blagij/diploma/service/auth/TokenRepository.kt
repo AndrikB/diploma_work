@@ -2,6 +2,7 @@ package org.blagij.diploma.service.auth
 
 import io.vertx.pgclient.PgPool
 import io.vertx.sqlclient.Row
+import io.vertx.sqlclient.RowSet
 import io.vertx.sqlclient.Tuple
 import org.blagij.diploma.common.Repository
 import java.util.UUID
@@ -20,6 +21,14 @@ class TokenRepository(override val pgPool: PgPool) : Repository<Token>() {
             VALUES ($1, $2)
             returning *
         """.trimIndent(), Tuple.of(token.userId, token.token))
+    }
+
+    suspend fun cleanUpExpiredTokens(): RowSet<Row> {
+        return exec("""
+            DELETE FROM tokens 
+            WHERE created_at > now() + interval '1 hour'
+            returning *
+        """.trimIndent())
     }
 
 }

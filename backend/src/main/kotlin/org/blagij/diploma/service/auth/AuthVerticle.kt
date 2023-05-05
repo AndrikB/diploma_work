@@ -30,6 +30,7 @@ class AuthVerticle(
                 "/api/v1/auth",
                 "/api/v1/game",
             )
+
             route().order(-1).handler {
                 val requestPath = it.request().path()
 
