@@ -1,6 +1,6 @@
 package org.blagij.diploma
 
-import io.vertx.core.Future
+import io.vertx.core.CompositeFuture
 import io.vertx.core.Handler
 import io.vertx.core.Verticle
 import io.vertx.core.Vertx
@@ -16,8 +16,7 @@ import org.kodein.di.direct
 import org.kodein.di.generic.allInstances
 import org.kodein.di.generic.instance
 import java.time.Duration
-import java.time.LocalTime.now
-import java.util.concurrent.atomic.AtomicInteger
+import java.time.LocalTime.*
 
 val log = logger("Main")
 
@@ -47,23 +46,12 @@ fun setupVerticles(verticles: List<Verticle>, vertx: Vertx, kodein: Kodein) {
 }
 
 
-fun Vertx.deploy(verticles: List<Verticle>): Future<Unit> {
-    return Future.future { deploy ->
-        val counter = AtomicInteger(verticles.size)
-
-        verticles.forEachIndexed { _, verticle ->
-            deployVerticle(verticle) {
-                if (it.failed()) {
-                    deploy.fail(it.cause())
-                }
-
-                log.info("Deployed: ${verticle::class.simpleName}")
-                if (counter.decrementAndGet() == 0) {
-                    deploy.complete()
-                }
-            }
+fun Vertx.deploy(verticles: List<Verticle>): CompositeFuture {
+    return CompositeFuture.all(verticles.map {
+        deployVerticle(it).onSuccess {
+            log.info("Deployed: ${it::class.simpleName}")
         }
-    }
+    })
 }
 
 fun getListOfPeriodics(): List<Handler<Long>> {
@@ -73,7 +61,7 @@ fun getListOfPeriodics(): List<Handler<Long>> {
 }
 
 fun setupPeriodics(vertx: Vertx) {
-    val timeToMidnight = now().toSecondOfDay().mod(86400).plus(3600 * 3) * 1000L
+    val timeToMidnight = (of(3, 0).toSecondOfDay() - now().toSecondOfDay()).mod(86400L)
     getListOfPeriodics().forEach { periodic ->
         vertx.setPeriodic(timeToMidnight, Duration.ofDays(1).toMillis()) { periodic.handle(it) }
     }
