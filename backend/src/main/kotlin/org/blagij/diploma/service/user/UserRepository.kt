@@ -1,9 +1,10 @@
-package org.blagij.diploma.service.auth
+package org.blagij.diploma.service.user
 
 import io.vertx.pgclient.PgPool
 import io.vertx.sqlclient.Row
 import io.vertx.sqlclient.Tuple
 import org.blagij.diploma.common.Repository
+import org.blagij.diploma.service.auth.AuthRequest
 import java.util.UUID
 
 class UserRepository(override val pgPool: PgPool) : Repository<User>() {

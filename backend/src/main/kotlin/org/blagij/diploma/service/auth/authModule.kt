@@ -10,7 +10,6 @@ import org.kodein.di.generic.instance
 
 val authModule = Kodein.Module("auth") {
     single<AuthVerticle>()
-    single<UserRepository>()
     single<TokenRepository>()
     single<EMailClient>()
     single<JWTAuth> {
