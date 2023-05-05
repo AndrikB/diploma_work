@@ -1,0 +1,21 @@
+<ng-template [ngIf]="games">
+  <div *ngFor="let game of games">
+    <a class="row m-2" [routerLink]="['/game/'+game.objectid]">
+
+      <img class="col-3" src="{{game.images.square200}}">
+      <div class="col">
+        {{game.name}} ({{game.yearpublished}})
+        <div>
+          <img src="../../../../../assets/img/raining.png" width="30px" height="30px">
+          {{game.average}}
+        </div>
+
+        <div>
+          <img src="../../../../../assets/img/complexity.png" width="30px" height="30px">
+          {{game.avgweight}}
+        </div>
+
+      </div>
+    </a>
+  </div>
+</ng-template>

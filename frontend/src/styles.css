@@ -1,0 +1,9 @@
+@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
+
+body {
+  background-color: #e7e7ea;
+}
+
+.violet {
+  background-color: #3f3a60 !important;
+}

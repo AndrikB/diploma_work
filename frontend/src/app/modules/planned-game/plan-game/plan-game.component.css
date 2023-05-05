@@ -1,0 +1,5 @@
+:host ::ng-deep .mat-form-field-flex {
+  background-color: whitesmoke;
+  border-radius: 5px;
+  padding-left: 5px;
+}

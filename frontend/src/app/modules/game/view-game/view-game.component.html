@@ -1,0 +1,84 @@
+<ng-template [ngIf]="game!=null">
+  <div class="row m-0 pt-2">
+    <img class="col-2 rounded img-responsive" style="max-width: 100%; height: auto;" src="{{game.thumbnail}}" alt="{{game.name[0].value}}">
+
+    <div class="col-10">
+      <div class="row">
+        <h2 class="col-9">{{game.name[0].value}} ({{game.yearpublished.value}})</h2>
+
+        <button mat-raised-button class="col-2" *ngIf="securityService.isLoggedIn()"
+        (click)="this.planGame = !this.planGame">
+          Plan Game
+        </button>
+      </div>
+
+      <br>
+      <div [innerHTML]='game.description.split(".")[0]'>.</div>
+
+      <div class="row">
+
+        <div class="col-3 text-center">
+          <b>Players</b>
+          <br>
+          <img src="../../../../assets/img/players.png" alt="players" width="50px">
+          <br>
+          <b>{{game.minplayers.value}}-{{game.maxplayers.value}}</b>
+        </div>
+
+        <div class="col-3 text-center">
+          <b>Playing time</b>
+          <br>
+          <img src="../../../../assets/img/time.png" alt="players" width="50px">
+          <br>
+          <b>{{game.minplaytime.value}}-{{game.maxplaytime.value}} minutes </b>
+        </div>
+
+        <div class="col-3 text-center">
+          <b>Min age</b>
+          <br>
+          <img src="../../../../assets/img/minage.png" alt="players" width="50px">
+          <br>
+          <b>{{game.minage.value}}+</b>
+        </div>
+
+<!--        <div class="col-3">-->
+<!--          complexity-->
+<!--          <br>-->
+<!--          <img src="../../../../assets/img/complexity.png" alt="players" width="50px">-->
+<!--          <br>-->
+<!--          {{game.minage.value}}+-->
+<!--        </div>-->
+
+
+      </div>
+
+
+    </div>
+  </div>
+
+  <mat-chip-list>
+    <h5 class="p-3">Categories:</h5>
+    <ng-template ngFor let-category [ngForOf]="game.boardgamecategory">
+      <a [routerLink]="[convertToLink(category, 'category')]">
+        <mat-chip>{{category}}</mat-chip>
+      </a>
+    </ng-template>
+  </mat-chip-list>
+
+  <mat-chip-list>
+    <h5 class="pl-3">Mechanics:</h5>
+    <ng-template ngFor let-mechanic [ngForOf]="game.boardgamemechanic">
+      <a [routerLink]="[convertToLink(mechanic, 'mechanic')]">
+        <mat-chip>{{mechanic}}</mat-chip>
+      </a>
+    </ng-template>
+  </mat-chip-list>
+
+  <app-plan-game *ngIf="this.planGame" [game]="game" (newItemEvent)="planGame = false"></app-plan-game>
+
+  <h3 class="pl-2">Description</h3>
+
+  <div class="pl-2" [innerHTML]='game.description'></div>
+
+
+</ng-template>

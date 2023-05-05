@@ -1,0 +1,11 @@
+<ng-template [ngIf]="types">
+  <h3>Chose {{type}}</h3>
+
+  <mat-selection-list [multiple]="false">
+    <mat-list-option *ngFor="let category of types"
+                     [routerLink]="['/games', type]" [queryParams]="{'name':category.name}">
+      {{category.name}}
+    </mat-list-option>
+  </mat-selection-list>
+
+</ng-template>

@@ -1,0 +1,43 @@
+<div class="container">
+
+  <div class="row">
+    <div class="col"></div>
+
+    <div class="col">
+      <form (submit)="login()" action="#">
+        <h3 class="text-center">Sign in</h3>
+
+        <mat-form-field>
+          <mat-label>Login</mat-label>
+          <input type="text" matInput [formControl]="loginFormControl" placeholder="Write your login">
+          <mat-error *ngIf="loginFormControl.hasError('required')">
+            Login is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Password</mat-label>
+          <input type="password" matInput [formControl]="passwordFormControl" placeholder="Write your password">
+          <mat-error *ngIf="passwordFormControl.hasError('required')">
+            Password is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+
+        <div class="form-group">
+          <button type="submit" class="btn btn-dark violet col-sm">
+            <b>Login</b>
+          </button>
+        </div>
+      </form>
+
+      <button mat-raised-button class="w-100" (click)="loginViaGitHub()">
+        <b>Login via github</b>
+        <img class="pl-1" src="../../../../../assets/img/GitHub-Mark-32px.png" alt="github logo">
+      </button>
+
+    </div>
+    <div class="col"></div>
+  </div>
+</div>
+
+

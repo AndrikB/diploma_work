@@ -18,7 +18,10 @@ dependencies {
     implementation "io.vertx:vertx-web"
     implementation "io.vertx:vertx-lang-kotlin-coroutines"
     implementation "io.vertx:vertx-lang-kotlin"
+    implementation 'io.vertx:vertx-web-client:4.4.1'
+    implementation "org.jsoup:jsoup:1.11.2"
 
+    implementation 'io.reactiverse:reactive-pg-client:0.11.4'
     implementation "io.netty:netty-resolver-dns-native-macos:4.1.68.Final:osx-aarch_64"
 
 

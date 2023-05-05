@@ -1,0 +1,27 @@
+<ng-template [ngIf]="gamesInfo">
+
+  <div *ngFor="let plannedGame of plannedGames; let i = index;">
+
+    <div class="row m-2">
+
+      <img class="col-3" src="{{gamesInfo[i].image}}">
+      <div class="col">
+        <a [routerLink]="['/game', gamesInfo[i].id]">{{gamesInfo[i].name[0].value}} ({{gamesInfo[i].yearpublished.value}})</a>
+        <br>
+        Date: {{plannedGame.date}}
+        <br>
+        Location: {{plannedGame.address}}
+        <br>
+        Count players: {{plannedGame.currentCount}}/{{plannedGame.countPlayers}}
+        <br>
+        Players: {{plannedGame.userNames}}
+      </div>
+
+      <div class="col">
+        <button mat-raised-button *ngIf="plannedGame.canParticipate" (click)="participate(plannedGame.id, plannedGame)">Participate</button>
+        <div *ngIf="plannedGame.participate">You participate</div>
+      </div>
+    </div>
+  </div>
+
+</ng-template>

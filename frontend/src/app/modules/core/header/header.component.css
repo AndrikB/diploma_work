@@ -1,0 +1,21 @@
+.nav-link {
+  border-radius: 4px;
+}
+
+mat-label {
+color: whitesmoke;
+}
+
+.nav-link:hover {
+  background-color: #2c2943 !important;
+}
+
+:host ::ng-deep .mat-form-field-infix {
+  background-color: whitesmoke;
+  border-radius: 5px;
+  padding-left: 5px;
+}
+
+links {
+  margin-bottom: -1.25em;
+}

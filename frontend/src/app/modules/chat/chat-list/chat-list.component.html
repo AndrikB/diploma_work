@@ -1,0 +1,24 @@
+<div class="row p-2">
+  <div class="col-2"></div>
+  <div class="col-8">
+    <button *ngIf="!creation" mat-raised-button class="form-control violet mb-3" color="primary" (click)="creation = true;">
+      Create Chat
+    </button>
+
+    <div *ngIf="creation" class="input-group mb-3">
+      <input type="text" class="form-control" [(ngModel)]="chatName" placeholder="Name of chat">
+      <div class="input-group-append">
+        <button mat-raised-button class="ml-2 violet" color="primary" (click)="createChat()">Create chat</button>
+      </div>
+    </div>
+
+    <ng-container *ngFor="let chat of chats">
+      <div class="chat_list" routerLink="../chat/{{chat.id}}">
+        <div class="chat_ib">
+          <h5>{{chat.name}}</h5>
+          <p *ngIf="chat.countUsers">{{chat.countUsers}} participants</p>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>
