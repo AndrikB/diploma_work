@@ -12,6 +12,10 @@ class GameVerticle(
             "GET /api/v1/game/search/:name" { name: String ->
                 httpGameClient.searchGame(name)
             }
+
+            "GET /api/v1/game/:id" { id: String ->
+                httpGameClient.getById(id)
+            }
         }
     }
 }

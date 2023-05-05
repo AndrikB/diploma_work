@@ -14,7 +14,7 @@ import kotlin.reflect.jvm.reflect
 
 class WebRouter(private val vertx: Vertx) : RouterImpl(vertx) {
 
-    private val jsonMapper = ObjectMapper()
+    private val jsonMapper = ObjectMapper().registerModule(ResponseJacksonSerializers())
     private val log = logger(this::class)
 
     fun route(address: String, handler: suspend (RoutingContext) -> Any?): Route {

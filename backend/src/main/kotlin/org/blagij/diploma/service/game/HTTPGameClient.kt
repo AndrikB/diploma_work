@@ -2,12 +2,16 @@ package org.blagij.diploma.service.game
 
 import io.vertx.ext.web.client.WebClient
 import io.vertx.kotlin.coroutines.await
+import org.blagij.diploma.common.logger
+import org.json.JSONObject
+import org.json.XML
 import org.jsoup.Jsoup
 
 
 class HTTPGameClient(val client: WebClient) {
 
     private val bggUrl = "https://boardgamegeek.com"
+    private val log = logger(this::class)
 
     suspend fun searchGame(name: String): List<Game> {
         return client.getAbs("$bggUrl/search/boardgame?nosession=1&q=$name&showcount=20")
@@ -16,6 +20,32 @@ class HTTPGameClient(val client: WebClient) {
             .toGameList()
 
     }
+
+    suspend fun getById(id: String): JSONObject {
+        val response = client.getAbs("$bggUrl/xmlapi2/thing?id=$id")
+            .send().await()
+            .bodyAsString()
+
+        log.info("getById $id response $response")
+
+        val json: JSONObject = XML.toJSONObject(response).getJSONObject("items").getJSONObject("item")
+
+        log.info("getById $id json $json")
+
+        return json.addLinks("boardgamecategory")
+            .addLinks("boardgamemechanic")
+            .put("id", id)
+    }
+}
+
+private fun JSONObject.addLinks(nameOfLink: String): JSONObject {
+    val categories: List<String> = this.getJSONArray("link").toList()
+        .filterIsInstance<Map<*, *>>()
+        .filter { nameOfLink == it["type"] }
+        .map { it["value"].toString() }
+
+    this.put(nameOfLink, categories)
+    return this
 }
 
 private fun String.toGameList(): List<Game> {
