@@ -11,6 +11,7 @@ export class GameTypesListComponent implements OnInit {
 
   types: Array<any> | undefined
   type: string = '';
+  name: string = '';
 
   constructor(private bggApiService: BggApiService,
               private route: ActivatedRoute) {
@@ -27,5 +28,12 @@ export class GameTypesListComponent implements OnInit {
         )
       }
     })
+    this.route.queryParams.subscribe(queryParams => {
+      this.name = queryParams.name
+    });
+  }
+
+  fixCategoryName(name: String): String {
+    return name.replaceAll('-', ' ').toUpperCase()
   }
 }

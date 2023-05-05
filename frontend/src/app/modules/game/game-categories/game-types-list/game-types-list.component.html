@@ -3,8 +3,9 @@
 
   <mat-selection-list [multiple]="false">
     <mat-list-option *ngFor="let category of types"
+                     [style.background-color]="(category.name == name) ? '#73c7af' : ''"
                      [routerLink]="['/games', type]" [queryParams]="{'name':category.name}">
-      {{category.name}}
+      {{fixCategoryName(category.name)}}
     </mat-list-option>
   </mat-selection-list>
 

@@ -59,7 +59,7 @@
   <mat-chip-list>
     <h5 class="p-3">Categories:</h5>
     <ng-template ngFor let-category [ngForOf]="game.boardgamecategory">
-      <a [routerLink]="[convertToLink(category, 'category')]">
+      <a [routerLink]="'/games/category'" [queryParams]="{'name':convertToLink(category)}">
         <mat-chip>{{category}}</mat-chip>
       </a>
     </ng-template>
@@ -68,7 +68,7 @@
   <mat-chip-list>
     <h5 class="pl-3">Mechanics:</h5>
     <ng-template ngFor let-mechanic [ngForOf]="game.boardgamemechanic">
-      <a [routerLink]="[convertToLink(mechanic, 'mechanic')]">
+      <a [routerLink]="'/games/mechanic'" [queryParams]="{'name':convertToLink(mechanic)}">
         <mat-chip>{{mechanic}}</mat-chip>
       </a>
     </ng-template>
