@@ -48,6 +48,14 @@ class UserRepository(override val pgPool: PgPool) : Repository<User>() {
 
     }
 
+    suspend fun getUserByUserId(userId: UUID): User {
+        return queryFirst("""
+            SELECT *
+            FROM users
+            WHERE user_id=$1
+        """.trimIndent(), Tuple.of(userId)
+        )
+    }
 
 }
 data class User(
