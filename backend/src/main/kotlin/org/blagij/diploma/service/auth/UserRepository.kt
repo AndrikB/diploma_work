@@ -38,6 +38,16 @@ class UserRepository(override val pgPool: PgPool) : Repository<User>() {
         )
     }
 
+    suspend fun findUser(body: AuthRequest): User {
+        return queryFirst("""
+            SELECT *
+            FROM users
+            WHERE login=$1 AND password=$2
+        """.trimIndent(), Tuple.of(body.login, body.password)
+        )
+
+    }
+
 
 }
 data class User(

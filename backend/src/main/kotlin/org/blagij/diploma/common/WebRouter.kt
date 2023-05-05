@@ -48,6 +48,7 @@ class WebRouter(private val vertx: Vertx) : RouterImpl(vertx) {
 
                     when (result) {
                         null -> response.end()
+                        is String -> response.end(result)
                         else -> response.end(jsonMapper.writeValueAsString(result))
                     }
 
