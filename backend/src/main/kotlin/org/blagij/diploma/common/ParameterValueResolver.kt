@@ -12,8 +12,6 @@ import java.time.format.DateTimeFormatter
 import java.util.UUID
 import kotlin.reflect.KClass
 import kotlin.reflect.KParameter
-import kotlin.reflect.full.isSubtypeOf
-import kotlin.reflect.full.starProjectedType
 
 class ParameterValueResolver(private val ctx: RoutingContext) {
 
@@ -23,6 +21,8 @@ class ParameterValueResolver(private val ctx: RoutingContext) {
         val classifier = it.type.classifier
 
         return when (it.name) {
+            "ctx", "context" -> ctx
+            "userId", "userID" -> UUID.fromString(ctx.user().principal().getString("jti"))
             "body" -> {
                 when (classifier) {
                     JsonObject::class -> ctx.body().asJsonObject()
@@ -30,16 +30,7 @@ class ParameterValueResolver(private val ctx: RoutingContext) {
                     String::class -> ctx.body().asString()
                     else -> {
                         try {
-                            if (it.type.isSubtypeOf(List::class.starProjectedType)) {
-                                val type = jsonMapper.typeFactory.constructCollectionType(
-                                    List::class.java,
-                                    (it.type.arguments.first().type!!.classifier as KClass<*>).javaObjectType
-                                )
-
-                                jsonMapper.readValue(ctx.body().asString(), type)
-                            } else {
-                                jsonMapper.readValue(ctx.body().asString(), (classifier as KClass<*>).java)
-                            }
+                            jsonMapper.readValue(ctx.body().asString(), (classifier as KClass<*>).java)
                         } catch (e: Exception) {
                             throw when {
                                 e is MissingKotlinParameterException || e is NullPointerException || e is MismatchedInputException
@@ -51,8 +42,6 @@ class ParameterValueResolver(private val ctx: RoutingContext) {
                     }
                 }
             }
-            "ctx", "context" -> ctx
-            "userId", "userID" -> UUID.fromString(ctx.user().principal().getString("jti"))
             else ->
                 mapValue(
                     ctx.anyParam(it.name!!),
