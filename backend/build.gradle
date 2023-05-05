@@ -19,7 +19,15 @@ dependencies {
     implementation "io.vertx:vertx-lang-kotlin-coroutines"
     implementation "io.vertx:vertx-lang-kotlin"
 
+    implementation "io.netty:netty-resolver-dns-native-macos:4.1.68.Final:osx-aarch_64"
+
+
+    implementation 'org.kodein.di:kodein-di-generic-jvm:6.4.1'
+
+    implementation 'org.jetbrains.kotlin:kotlin-reflect:1.8.21'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+
+    implementation 'com.fasterxml.jackson.module:jackson-module-kotlin:2.9.9'
 
     testImplementation "io.vertx:vertx-junit5"
     testImplementation "org.junit.jupiter:junit-jupiter:$junitJupiterVersion"
