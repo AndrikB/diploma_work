@@ -4,6 +4,7 @@ import io.vertx.core.json.JsonObject
 import io.vertx.ext.web.client.WebClient
 import io.vertx.kotlin.coroutines.await
 import org.blagij.diploma.common.logger
+import org.json.JSONArray
 import org.json.JSONObject
 import org.json.XML
 import org.jsoup.Jsoup
@@ -12,6 +13,7 @@ import org.jsoup.Jsoup
 class HTTPGameClient(val client: WebClient) {
 
     private val bggUrl = "https://boardgamegeek.com"
+    private val geekdoUrl = "https://api.geekdo.com/api/geekitem/linkeditems?linkdata_index=boardgame&nosession=1&objecttype=property&pageid=1&showcount=25&sort=rank&subtype=boardgamecategory"
     private val log = logger(this::class)
 
     suspend fun searchGame(name: String): List<Game> {
@@ -19,7 +21,6 @@ class HTTPGameClient(val client: WebClient) {
             .send().await()
             .bodyAsString()
             .toGameList()
-
     }
 
     suspend fun getById(id: String): JSONObject {
@@ -27,13 +28,10 @@ class HTTPGameClient(val client: WebClient) {
             .send().await()
             .bodyAsString()
 
-        log.info("getById $id response $response")
-
         val json: JSONObject = XML.toJSONObject(response).getJSONObject("items").getJSONObject("item")
 
-        log.info("getById $id json $json")
-
-        return json.addLinks("boardgamecategory")
+        return json
+            .addLinks("boardgamecategory")
             .addLinks("boardgamemechanic")
             .put("id", id)
     }
@@ -56,7 +54,7 @@ class HTTPGameClient(val client: WebClient) {
     }
 
     suspend fun getGamesByTypes(gameTypeId: Int): JsonObject {
-        return client.getAbs("https://api.geekdo.com/api/geekitem/linkeditems?linkdata_index=boardgame&nosession=1&objectid=${gameTypeId}&objecttype=property&pageid=1&showcount=25&sort=rank&subtype=boardgamecategory",)
+        return client.getAbs("$geekdoUrl&objectid=${gameTypeId}")
             .send().await()
             .bodyAsJsonObject()
     }
