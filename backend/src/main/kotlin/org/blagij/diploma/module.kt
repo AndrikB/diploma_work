@@ -8,6 +8,7 @@ import io.vertx.pgclient.PgPool
 import io.vertx.sqlclient.PoolOptions
 import org.blagij.diploma.common.WebRouter
 import org.blagij.diploma.common.single
+import org.blagij.diploma.service.auth.authModule
 import org.blagij.diploma.service.game.gameModule
 import org.blagij.diploma.service.ui.uiModule
 import org.kodein.di.Kodein
@@ -39,6 +40,7 @@ val kodein = Kodein {
 
     importAll(
         uiModule,
-        gameModule
+        gameModule,
+        authModule
     )
 }

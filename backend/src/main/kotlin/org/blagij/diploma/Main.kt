@@ -3,8 +3,11 @@ package org.blagij.diploma
 import io.vertx.core.Future
 import io.vertx.core.Verticle
 import io.vertx.core.Vertx
+import io.vertx.core.json.jackson.DatabindCodec
+import io.vertx.ext.mail.MailMessage
 import io.vertx.kotlin.core.http.httpServerOptionsOf
 import org.blagij.diploma.common.WebRouter
+import org.blagij.diploma.common.codec.MailMessageCodec
 import org.blagij.diploma.common.logger
 import org.kodein.di.Kodein
 import org.kodein.di.direct
@@ -16,6 +19,9 @@ val log = logger("Main")
 
 fun main() {
     val vertx = kodein.direct.instance<Vertx>()
+
+    val mapper = DatabindCodec.mapper()
+    vertx.eventBus().registerDefaultCodec(MailMessage::class.java, MailMessageCodec(mapper))
 
     setupVerticles(kodein.direct.allInstances(), vertx, kodein)
 }
