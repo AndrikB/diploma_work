@@ -1,5 +1,8 @@
+@file:Suppress("RemoveExplicitTypeArguments")
+
 package org.blagij.diploma
 
+import chatModule
 import io.vertx.core.Vertx
 import io.vertx.core.eventbus.EventBus
 import io.vertx.ext.web.client.WebClient
@@ -46,5 +49,6 @@ val kodein = Kodein {
         authModule,
         userModule,
         plannedGameModule,
+        chatModule
     )
 }
