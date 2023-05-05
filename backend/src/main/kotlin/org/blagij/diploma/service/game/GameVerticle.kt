@@ -5,17 +5,18 @@ import org.blagij.diploma.common.WebRouter
 
 class GameVerticle(
     override val router: WebRouter,
-    httpGameClient: HTTPGameClient,
+    httpBGGClient: HTTPGameClient,
     gameTypeRepository: GameTypeRepository,
 ) : BaseVerticle() {
     init {
         routes {
+
             "GET /api/v1/game/search/:name" { name: String ->
-                httpGameClient.searchGame(name)
+                httpBGGClient.searchGame(name)
             }
 
             "GET /api/v1/game/:id" { id: String ->
-                httpGameClient.getById(id)
+                httpBGGClient.getById(id)
             }
 
             "GET /api/v1/game/type/:type" { type: String ->
@@ -25,7 +26,7 @@ class GameVerticle(
             "GET /api/v1/game/:type/:name" { name: String ->
                 val gameType = gameTypeRepository.findGameTypeByNameIgnoreCase(name)
 
-                httpGameClient.getGamesByTypes(gameType.id)
+                httpBGGClient.getGamesByTypes(gameType.id)
             }
         }
     }
