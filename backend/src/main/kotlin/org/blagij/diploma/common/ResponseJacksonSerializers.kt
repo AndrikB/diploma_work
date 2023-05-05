@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.SerializerProvider
 import com.fasterxml.jackson.databind.exc.InvalidFormatException
 import io.vertx.core.json.JsonArray
 import io.vertx.core.json.JsonObject
+import org.json.JSONArray
 import org.json.JSONObject
 import java.io.IOException
 import java.time.DateTimeException
@@ -31,6 +32,7 @@ class ResponseJacksonSerializers : JacksonSerializers() {
         addSerializer(ByteArray::class.java, ByteArraySerializer())
         addDeserializer(ByteArray::class.java, ByteArrayDeserializer())
         addSerializer(JSONObject::class.java, OrgJSONObjectSerializer())
+        addSerializer(JSONArray::class.java, OrgJSONArraySerializer())
 
         serializer<OffsetDateTime> { value, generator ->
             generator.writeNumber(value.toInstant().epochSecond)
@@ -51,6 +53,13 @@ class ResponseJacksonSerializers : JacksonSerializers() {
         @Throws(IOException::class)
         override fun serialize(value: JSONObject, jgen: JsonGenerator, provider: SerializerProvider) {
             jgen.writeObject(value.toMap())
+        }
+    }
+
+    private class OrgJSONArraySerializer : JsonSerializer<JSONArray>() {
+        @Throws(IOException::class)
+        override fun serialize(value: JSONArray, jgen: JsonGenerator, provider: SerializerProvider) {
+            jgen.writeObject(value.toList())
         }
     }
 

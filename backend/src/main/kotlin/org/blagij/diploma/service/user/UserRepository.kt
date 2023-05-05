@@ -68,6 +68,15 @@ class UserRepository(override val pgPool: PgPool) : Repository<User>() {
 
     }
 
+    suspend fun getUserForParticipate(gameId: UUID): List<User> {
+        return query("""
+            SELECT users.*
+            FROM users
+            INNER JOIN game_participants gp on users.user_id = gp.user_id
+            WHERE gp.planned_game_id = $1
+        """.trimIndent(), Tuple.of(gameId))
+    }
+
 }
 data class User(
     val id: UUID = UUID.randomUUID(),
