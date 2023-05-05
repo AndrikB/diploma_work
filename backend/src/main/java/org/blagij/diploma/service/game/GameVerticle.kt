@@ -5,11 +5,12 @@ import org.blagij.diploma.common.WebRouter
 
 class GameVerticle(
     override val router: WebRouter,
+    httpGameClient: HTTPGameClient,
 ) : BaseVerticle() {
     init {
         routes {
-            "GET /v1/games" {
-                listOf("1234", "12131")
+            "GET /api/v1/game/search/:name" { name: String ->
+                httpGameClient.searchGame(name)
             }
         }
     }

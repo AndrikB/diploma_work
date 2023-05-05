@@ -8,13 +8,16 @@ import io.vertx.ext.web.RoutingContext
 import io.vertx.ext.web.handler.BodyHandler
 import io.vertx.ext.web.impl.RouterImpl
 import io.vertx.kotlin.coroutines.dispatcher
-import kotlinx.coroutines.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlin.reflect.jvm.reflect
 
 class WebRouter(private val vertx: Vertx) : RouterImpl(vertx) {
 
     private val jsonMapper = ObjectMapper()
+    private val log = logger(this::class)
 
-    private fun route(address: String, handler: suspend (RoutingContext) -> Any?): Route {
+    fun route(address: String, handler: suspend (RoutingContext) -> Any?): Route {
         val route: Route = if (address.contains(' ')) {
             with(address.split(' ')) {
                 val method = HttpMethod.valueOf(first())
@@ -50,12 +53,12 @@ class WebRouter(private val vertx: Vertx) : RouterImpl(vertx) {
 
 
                 } catch (e: Throwable) {
-                    println("Route '$address' exception $e")
+                    log.error("Route '$address' exception", e)
 
                     ctx.response()
                         .putHeader("Content-Type", "application/json")
                         .setStatusCode(500)
-                        .end(e.message)
+                        .end(e.message ?: "Something went wrong")
                 }
             }
         }
@@ -71,4 +74,16 @@ class WebRouter(private val vertx: Vertx) : RouterImpl(vertx) {
             handler().takeIf { successCode == 200 }
         }
 
+
+    inline operator fun <reified A> String.invoke(
+        successCode: Int = 200,
+        noinline handler: suspend (A) -> Any?
+    ): Route {
+        return route(this) { ctx ->
+            ctx.response().statusCode = successCode
+
+            val params = handler.reflect()!!.parameters.map(ParameterValueResolver(ctx)::resolve)
+            handler(params[0] as A).takeIf { successCode == 200 }
+        }
+    }
 }
