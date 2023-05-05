@@ -19,11 +19,13 @@ dependencies {
     implementation "io.vertx:vertx-lang-kotlin-coroutines"
     implementation "io.vertx:vertx-lang-kotlin"
     implementation 'io.vertx:vertx-web-client:4.4.1'
+    implementation "io.vertx:vertx-mail-client"
+    implementation "io.vertx:vertx-auth-jwt"
 
     implementation 'org.jsoup:jsoup:1.15.3'
     implementation 'org.json:json:20230227'
 
-    implementation 'io.reactiverse:reactive-pg-client:0.11.4'
+    implementation 'io.vertx:vertx-pg-client:0.11.4'
     implementation "io.netty:netty-resolver-dns-native-macos:4.1.68.Final:osx-aarch_64"
 
 
