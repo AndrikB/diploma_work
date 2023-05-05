@@ -2,6 +2,7 @@ package org.blagij.diploma.service.user
 
 import io.vertx.pgclient.PgPool
 import io.vertx.sqlclient.Row
+import io.vertx.sqlclient.RowSet
 import io.vertx.sqlclient.Tuple
 import org.blagij.diploma.common.Repository
 import org.blagij.diploma.service.auth.AuthRequest
@@ -33,7 +34,7 @@ class UserRepository(override val pgPool: PgPool) : Repository<User>() {
         return queryFirst("""
             UPDATE users
             SET status='ACTIVATED'
-            WHERE user_id = (SELECT user_id from tokens where token = $1)
+            WHERE user_id = (SELECT user_id from tokens where token = $1 and created_at < now() + interval '1 hour')
             returning *
         """.trimIndent(), Tuple.of(token)
         )
@@ -75,6 +76,15 @@ class UserRepository(override val pgPool: PgPool) : Repository<User>() {
             INNER JOIN game_participants gp on users.user_id = gp.user_id
             WHERE gp.planned_game_id = $1
         """.trimIndent(), Tuple.of(gameId))
+    }
+
+    suspend fun deleteNonActivatedUsers(): RowSet<Row> {
+        return exec("""
+            DELETE FROM users
+            where status='UNACTIVATED' 
+            AND user_id NOT IN (SELECT user_id FROM tokens)
+            returning *
+        """.trimIndent())
     }
 
 }
