@@ -1,0 +1,11 @@
+pluginManagement {
+    plugins {
+        id 'kotlin'
+    }
+    repositories {
+        gradlePluginPortal()
+    }
+}
+
+include 'backend'
+
